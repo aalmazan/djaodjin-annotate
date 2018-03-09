@@ -11,7 +11,7 @@ const OPTIONS = {
   width: null,
   height: null,
   // images: [],
-  images: ['./350x150.png'],
+  images: ['./750x800.png'],
   color: 'red',
   type: 'rectangle',
   linewidth: 2,
@@ -27,9 +27,8 @@ const OPTIONS = {
 };
 
 /**
- * Function to annotate the image
- * @param {[type]} el      [description]
- * @param {Object} options [description]
+ * Main class to handle annotations.
+ * Instantiate this and run `instance.init()`.
  */
 export default class Annotate {
   constructor(el, options) {
@@ -56,6 +55,10 @@ export default class Annotate {
     this.fontsize = 1;
   }
 
+  /**
+   * Set initial class variables
+   * @private
+   */
   _setVars() {
     this.linewidth = this.options.linewidth;
     this.fontsize = this.options.fontsize;
@@ -66,7 +69,6 @@ export default class Annotate {
     this.baseLayerId = `baseLayer_${this.$el.attr('id')}`;
     this.drawingLayerId = `drawingLayer_${this.$el.attr('id')}`;
     this.toolOptionId = `tool_option_${this.$el.attr('id')}`;
-    console.log(this.toolOptionId);
     this.$el.append($(`<canvas id="${this.baseLayerId}"></canvas>`));
     this.$el.append($(`<canvas id="${this.drawingLayerId}"></canvas>`));
     this.baseCanvas = document.getElementById(this.baseLayerId);
@@ -77,6 +79,12 @@ export default class Annotate {
     this.drawingContext.lineJoin = 'round';
   }
 
+  /**
+   * Set toolbox area if Bootstrap is being used.
+   * @param classPosition1
+   * @param classPosition2
+   * @private
+   */
   _setBootstrap(classPosition1, classPosition2) {
     this.$tool = `${'<div id="">' +
       '<button id="undoaction" title="Undo the last annotation"' +
@@ -113,6 +121,10 @@ export default class Annotate {
       '</div>';
   }
 
+  /**
+   * Set default/unstyled version of toolbox
+   * @private
+   */
   _setNonBootstrap() {
     this.$tool = '<div id="annotate-toolbox" style="display:inline-block"><button id="undoaction">UNDO</button>';
     if (this.options.unselectTool) {
@@ -179,7 +191,6 @@ export default class Annotate {
     }
 
     this.$tool = $(this.$tool);
-    console.log(this.$tool);
     $('.annotate-container').append(this.$tool);
 
     this._setCanvasPosition(this.$el.offset());
@@ -336,6 +347,7 @@ export default class Annotate {
     }
     self.img = new Image();
     self.img.src = image.path;
+    self.img.crossOrigin = 'Anonymous';
     self.img.onload = function () {
       if ((self.options.width && self.options.height) !== undefined ||
         (self.options.width && self.options.height) !== 0) {
@@ -830,59 +842,4 @@ export default class Annotate {
     self.options.onExport(image);
   }
 }
-
-$.fn.annotate = (options, cmdOption, callback) => {
-  let $annotate = $(this).data('annotate');
-  if (options === 'destroy') {
-    if ($annotate) {
-      $annotate.destroy();
-    } else {
-      throw new Error('No annotate initialized for: #' + $(this).attr(
-        'id'));
-    }
-  } else if (options === 'push') {
-    if ($annotate) {
-      $annotate.pushImage(cmdOption, true, callback);
-    } else {
-      throw new Error('No annotate initialized for: #' + $(this).attr(
-        'id'));
-    }
-  } else if (options === 'fill') {
-    if ($annotate) {
-      $annotate.addElements(cmdOption, true, callback);
-    } else {
-      throw new Error('No annotate initialized for: #' + $(this).attr(
-        'id'));
-    }
-  } else if (options === 'export') {
-    if ($annotate) {
-      $annotate.exportImage(cmdOption, callback);
-    } else {
-      throw new Error('No annotate initialized for: #' + $(this).attr(
-        'id'));
-    }
-  } else {
-    let opts = $.extend({}, $.fn.annotate.defaults, options);
-    let annotate = new Annotate($(this), opts);
-    $(this).data('annotate', annotate);
-  }
-};
-
-$.fn.annotate.defaults = {
-  width: null,
-  height: null,
-  images: [],
-  color: 'red',
-  type: 'rectangle',
-  linewidth: 2,
-  fontsize: '20px',
-  bootstrap: false,
-  position: 'top',
-  idAttribute: 'id',
-  selectEvent: 'change',
-  unselectTool: false,
-  onExport(image) {
-    console.log(image);
-  }
-};
 
