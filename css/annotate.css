@@ -1,19 +1,35 @@
-.annotate-container{
-	position: relative;
+.annotate-container {
+  position: relative;
 }
 
-.annotate-container > [id^=baseLayer]{
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 0;
-	background: grey;
+.annotate-container > [id^=baseLayer] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background: grey;
 }
 
-.annotate-container > [id^=drawingLayer]{
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 1;
-	background: transparent;
+.annotate-container > [id^=drawingLayer] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background: transparent;
+}
+
+textarea.annotate-textarea {
+  position: absolute;
+  z-index: 100000;
+  display: none;
+  top: 0;
+  left: 0;
+  background: transparent;
+  border: 1px dotted;
+  line-height: 25px;
+  font-family: sans-serif;
+  word-wrap: break-word;
+  outline-width: 0;
+  overflow: hidden;
+  padding: 0;
 }

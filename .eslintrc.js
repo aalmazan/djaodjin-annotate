@@ -1,4 +1,6 @@
 module.exports = {
-    "extends": "google",
-    "installedESLint": true
+  "extends": "airbnb-base",
+  "env": {
+    "browser": true
+  }
 };
