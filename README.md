@@ -1,25 +1,41 @@
-#djaodjin-annotate.js
+# djaodjin-annotate.js
 
 djaodjin-annotate.js is a simple jquery plugin allowing you to annotate
 a screenshot. Try the live demo on [DjaoDjin blog](https://djaodjin.com/blog/jquery-plugin-to-annotate-images.blog).
 
 
-#Usage
+# Installing
+```bash
+# npm
+$ npm install
 
-Load djaodjin-annotate.css and djaodjin-annotate.js
+# or, yarn
+$ yarn
+```
+
+# Building
+```bash
+# npm: Build demo script. Demo is in `app.html`
+$ npm run build:ex
+
+# yarn: Build demo script. Demo is in `app.html`
+$ yarn build:ex
+```
+
+# Usage
+
+Load djaodjin-annotate.css and compiled script
 ```html
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset=utf-8 />
 	<title></title>
-	<link rel="stylesheet" type="text/css" href="/static/css/djaodjin-annotate.css" />
+	<link rel="stylesheet" type="text/css" href="css/djaodjin-annotate.css" />
 </head>
 <body>
 
-
-	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-	<script type="text/javascript" src="/static/js/djaodjin-annotate.js"></script>
+	<script type="text/javascript" src="dist/bundle.js"></script>
 </body>
 </html>
 ```
@@ -30,11 +46,13 @@ Just add a div element inside ```body``.
 <div id="myCanvas"></div>
 ```
 
-and on a script:
+and bootstrap it in your script: 
 
 ```javascript
 $(document).ready(function(){
-	$("#myCanvas").annotate(options);
+  const options = { /* options here */ };
+  const Annotate = new annotate($('#myCanvas'), options);
+  Annotate.init();
 });
 ```
 
@@ -111,37 +129,40 @@ ex:
 
 If multiple images provided, an image selector is necessary to switch. Image selector must trigger an event on ```annotate-image-select``` class. you can custom the event by using ```selectEvent``` option (default: ```change```) and custom the readable image attribute by using ```idAttribute``` option (default: ```id```)
 
-#Contributing
+# Contributing
 
-The djaodjin-annotate project is using [Google Javascript style guidelines](https://google.github.io/styleguide/javascriptguide.xml),
-mechanically enforced through the [eslint-config-google](https://github.com/google/eslint-config-google) eslint plug-in.
-Thank you to @Josephdias92 for the initial work on this.
+The djaodjin-annotate project previously used [Google Javascript style guidelines](https://google.github.io/styleguide/javascriptguide.xml),
+initially contributed by @Josephdias92.
+
+It has now been changed (or is in the process of being changed) to conform to [the Airbnb style guide](https://github.com/airbnb/javascript).
 
 
-#Release notes
 
-###v0.0.4
+# Release notes
+
+### v0.0.4
 
 - Fix destroy method
 
-###v0.0.3
+### v0.0.3
 
 - Responsive annotation position
 - Reponsive line width and font size
 
-###v0.0.2
+### v0.0.2
 
 - Ability to destroy an annotate instance
 - work with multiple images
 - Ability add new image after initialization
 
-###v0.0.1
+### v0.0.1
 
 - bower release
 
-#License
+# License
 
 Copyright (c) 2015, Djaodjin Inc.
+Modifications copyright (c) 2018, Allan Almazan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
