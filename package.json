@@ -5,7 +5,7 @@
   "main": "djaodjin-annotate.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ex": "rollup -c",
+    "build:ex": "rollup -c && uglifyjs -o dist/bundle.min.js dist/bundle.js",
     "lint": "eslint src/*.js"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "homepage": "https://djaodjin.com/blog/jquery-plugin-to-annotate-images.blog",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-preset-airbnb": "^2.4.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
@@ -29,7 +30,8 @@
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^9.0.0",
     "rollup-plugin-node-resolve": "^3.2.0",
-    "rollup-plugin-uglify-es": "^0.0.1"
+    "rollup-plugin-uglify-es": "^0.0.1",
+    "uglify-es": "^3.3.9"
   },
   "dependencies": {
     "bootstrap": "~3.3.5",

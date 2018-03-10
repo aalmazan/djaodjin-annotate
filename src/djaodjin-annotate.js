@@ -367,26 +367,30 @@ export default class Annotate {
       currentImage.storedElement = self.storedElement;
       currentImage.storedUndo = self.storedUndo;
     }
+
     self.img = new Image();
     self.img.src = image.path;
     self.img.crossOrigin = 'Anonymous';
     self.img.onload = function () {
+      const img = this;
       if ((self.options.width && self.options.height) !== undefined ||
         (self.options.width && self.options.height) !== 0) {
-        self.currentWidth = this.width;
-        self.currentHeight = this.height;
-        self.selectImageSize.width = this.width;
-        self.selectImageSize.height = this.height;
+        self.currentWidth = img.width;
+        self.currentHeight = img.height;
+        self.selectImageSize.width = img.width;
+        self.selectImageSize.height = img.height;
       } else {
         self.currentWidth = self.options.width;
         self.currentHeight = self.options.height;
       }
-      self.baseCanvas.width = self.drawingCanvas.width = self.currentWidth;
-      self.baseCanvas.height = self.drawingCanvas.height = self.currentHeight;
-      self.baseContext.drawImage(
-        self.img, 0, 0, self.currentWidth,
-        self.currentHeight,
-      );
+
+      self.baseCanvas.width = self.currentWidth;
+      self.drawingCanvas.width = self.currentWidth;
+
+      self.baseCanvas.height = self.currentHeight;
+      self.drawingCanvas.height = self.currentHeight;
+
+      self.baseContext.drawImage(self.img, 0, 0, self.currentWidth, self.currentHeight);
       self.$el.css({
         height: self.currentHeight,
         width: self.currentWidth,
