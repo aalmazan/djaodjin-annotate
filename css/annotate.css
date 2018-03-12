@@ -17,3 +17,19 @@
 	z-index: 1;
 	background: transparent;
 }
+
+textarea.annotate-textarea {
+	position: absolute;
+	z-index: 100000;
+	display: none;
+	top: 0;
+	left: 0;
+	background: transparent;
+	border: 1px dotted;
+	line-height: 25px;
+	font-family: sans-serif;
+	word-wrap: break-word;
+	outline-width: 0;
+	overflow: hidden;
+	padding: 0;
+}

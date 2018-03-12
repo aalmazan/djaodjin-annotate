@@ -65,7 +65,7 @@ MIT License
         classPosition2 = 'btn-block';
       }
       if (self.options.bootstrap) {
-        self.$tool = '<div id="">' +
+        self.$tool = '<div id="" class="annotate-toolbox">' +
           '<button id="undoaction" title="Undo the last annotation"' +
           ' class="btn btn-primary ' + classPosition2 +
           ' annotate-undo">' +
@@ -114,8 +114,8 @@ MIT License
           '<i class="glyphicon glyphicon-arrow-right"></i></button>' +
           '</div>';
       } else {
-        self.$tool = '<div id="" style="display:inline-block">' +
-          '<button id="undoaction">UNDO</button>';
+        self.$tool = `<div id="" class="annotate-toolbox" style="display:inline-block">` +
+          '<button id="undoaction" class="annotate-undo">UNDO</button>';
         if (self.options.unselectTool) {
           self.$tool += '<input type="radio" name="' + self.toolOptionId +
             '" data-tool="null">NO TOOL SELECTED';
@@ -128,7 +128,7 @@ MIT License
           '<input type="radio" name="' + self.toolOptionId +
           '" data-tool="arrow">ARROW<input type="radio" name="' +
           self.toolOptionId + '" data-tool="pen">PEN' +
-          '<button id="redoaction"' +
+          '<button id="redoaction" class="annotate-redo"' +
           'title="Redo the last undone annotation">REDO</button>' +
           '</div>';
       }
@@ -161,13 +161,11 @@ MIT License
           left: canvasPosition.left
         });
       }
-      self.$textbox = $('<textarea id=""' +
-        ' style="position:absolute;z-index:100000;display:none;top:0;left:0;' +
-        'background:transparent;border:1px dotted; line-height:25px;' +
-        ';font-size:' + self.fontsize +
-        ';font-family:sans-serif;color:' + self.options.color +
-        ';word-wrap: break-word;outline-width: 0;overflow: hidden;' +
-        'padding:0px"></textarea>');
+
+      self.$textbox = $(`<textarea id="" class="annotate-textbox"` +
+        `style="font-size: ${self.fontsize};color: ${self.options.color}` +
+        `"></textarea>`);
+
       $('body').append(self.$textbox);
       if (self.options.images) {
         self.initBackgroundImages();
@@ -234,13 +232,12 @@ MIT License
     },
     addElements: function(newStoredElements, set, callback)
     {
-      var self = this; 
-      this.storedElement = newStoredElements; 
-      //console.log('DJ: Adding new annotations'); 
+      var self = this;
+      this.storedElement = newStoredElements;
+      //console.log('DJ: Adding new annotations');
       self.clear();
       self.redraw();
-      
-    },    
+    },
     pushImage: function(newImage, set, callback) {
       var self = this;
       var id = null;
@@ -309,6 +306,7 @@ MIT License
       }
       self.img = new Image();
       self.img.src = image.path;
+      self.img.crossOrigin = 'Anonymous';
       self.img.onload = function() {
         if ((self.options.width && self.options.height) !== undefined ||
           (self.options.width && self.options.height) !== 0) {
