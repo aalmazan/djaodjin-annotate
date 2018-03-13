@@ -114,7 +114,7 @@ MIT License
           '<i class="glyphicon glyphicon-arrow-right"></i></button>' +
           '</div>';
       } else {
-        self.$tool = `<div id="" class="annotate-toolbox" style="display:inline-block">` +
+        self.$tool = '<div id="" class="annotate-toolbox" style="display:inline-block">' +
           '<button id="undoaction" class="annotate-undo">UNDO</button>';
         if (self.options.unselectTool) {
           self.$tool += '<input type="radio" name="' + self.toolOptionId +
@@ -133,15 +133,19 @@ MIT License
           '</div>';
       }
       self.$tool = $(self.$tool);
-      $('.annotate-container').append(self.$tool);
       var canvasPosition = self.$el.offset();
       if (self.options.position === 'top' || self.options.position !==
         'top' && !self.options.bootstrap) {
         self.$tool.css({
-          position: 'absolute',
           top: -35,
-          left: canvasPosition.left
+          left: 0
         });
+
+        if (self.options.position === 'top') {
+          self.$tool.css({position: 'absolute'});
+        } else {
+          self.$tool.css({position: 'inherit'});
+        }
       } else if (self.options.position === 'left' && self.options.bootstrap) {
         self.$tool.css({
           position: 'absolute',
@@ -162,9 +166,19 @@ MIT License
         });
       }
 
-      self.$textbox = $(`<textarea id="" class="annotate-textbox"` +
-        `style="font-size: ${self.fontsize};color: ${self.options.color}` +
-        `"></textarea>`);
+      if ('top|right|left|bottom'.indexOf(self.options.position) >= 0) {
+        // If position is defined as one of the options above, append to default container
+        $('.annotate-container').append(self.$tool);
+      } else {
+        // Default where position is populated, but not a top|left|right|bottom
+        // Will be treated as element where the item will be inserted into
+        // self.$tool.css({position: 'inherit', display: 'inline-block'});
+        $(self.options.position).append(self.$tool);
+      }
+
+      self.$textbox = $('<textarea id="" class="annotate-textarea"' +
+        `style="font-size:${self.fontsize};color:${self.options.color}` +
+        '"></textarea>');
 
       $('body').append(self.$textbox);
       if (self.options.images) {
@@ -230,11 +244,9 @@ MIT License
       }
       return str;
     },
-    addElements: function(newStoredElements, set, callback)
-    {
+    addElements: function(newStoredElements, set, callback) {
       var self = this;
       this.storedElement = newStoredElements;
-      //console.log('DJ: Adding new annotations');
       self.clear();
       self.redraw();
     },
@@ -242,9 +254,11 @@ MIT License
       var self = this;
       var id = null;
       var path = null;
+      var src = null;
       if (typeof newImage === 'object') {
         id = newImage.id;
         path = newImage.path;
+        src = newImage.src;
       } else {
         id = newImage;
         path = newImage;
@@ -259,6 +273,7 @@ MIT License
       var image = {
         id: id,
         path: path,
+        src: src,
         storedUndo: [],
         storedElement: []
       };
@@ -305,7 +320,11 @@ MIT License
         currentImage.storedUndo = self.storedUndo;
       }
       self.img = new Image();
-      self.img.src = image.path;
+      if ('src' in image) {
+        self.img.src = image.src;
+      } else {
+        self.img.src = image.path;
+      }
       self.img.crossOrigin = 'Anonymous';
       self.img.onload = function() {
         if ((self.options.width && self.options.height) !== undefined ||
@@ -768,15 +787,13 @@ MIT License
         throw new Error('No annotate initialized for: #' + $(this).attr(
           'id'));
       }
-    
-    }else if (options === 'fill') {
+    } else if (options === 'fill') {
       if ($annotate) {
         $annotate.addElements(cmdOption, true, callback);
       } else {
         throw new Error('No annotate initialized for: #' + $(this).attr(
           'id'));
       }
-    
     } else if (options === 'export') {
       if ($annotate) {
         $annotate.exportImage(cmdOption, callback);
